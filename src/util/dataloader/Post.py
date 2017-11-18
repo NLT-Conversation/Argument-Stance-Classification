@@ -1,6 +1,10 @@
 class Post(object):
-    def __init__(self):
-        pass
+    def __init__(self, id, author, raw_text, discussion_id, timestamp):
+        self.id = id
+        self.author = author
+        self.raw_text = raw_text
+        self.parent_id = discussion_id
+        self.timestamp = timestamp
     """
     get_id
 
@@ -8,7 +12,7 @@ class Post(object):
         the post id
     """
     def get_id(self):
-        return ""
+        return self.id
 
     """
     get_author
@@ -16,17 +20,8 @@ class Post(object):
     Returns:
         the name of author
     """
-	def get_author(self):
-        return ""
-
-    """
-    get_title
-
-    Returns:
-        the title of this post
-    """
-	def get_title(self):
-        return ""
+    def get_author(self):
+        return self.author
 
     """
     get_raw_text
@@ -34,8 +29,8 @@ class Post(object):
     Returns:
         the plaintext of this post
     """
-	def get_raw_text(self):
-        return ""
+    def get_raw_text(self):
+        return self.raw_text
 
     """
     get_dicussion_id
@@ -43,17 +38,8 @@ class Post(object):
     Returns:
         the parent discussion id
     """
-	def get_dicussion_id(self):
-        return ""
-
-    """
-    get_author_stance
-
-    Returns:
-        the value(or text) of author stance of this post
-    """
-	def get_author_stance(self):
-        return ""
+    def get_dicussion_id(self):
+        return self.parent_id
 
     """
     get_timestamp
@@ -61,5 +47,5 @@ class Post(object):
     Returns:
         the timestamp
     """
-	def get_timestamp(self):
-        return 0
+    def get_timestamp(self):
+        return self.timestamp

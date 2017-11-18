@@ -1,6 +1,7 @@
-class Discussion(object):
-    def __init__(self):
-        pass
+class Topic(object):
+    def __init__(self, name):
+        self.name = name
+        self.discussion_ids = []
     """
     get_name
 
@@ -8,7 +9,7 @@ class Discussion(object):
         the name of this topic
     """
     def get_name(self):
-        return ""
+        return self.name
 
     """
     get_discussions
@@ -16,5 +17,5 @@ class Discussion(object):
     Returns:
         a list of Discussion objects
     """
-	def get_discussions(self):
-        return []
+    def get_discussion_ids(self):
+        return self.discussion_ids

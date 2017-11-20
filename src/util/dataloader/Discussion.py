@@ -3,9 +3,12 @@ class Discussion(object):
         self.id = id
         self.title = title
         self.topics = topics
+        self.labeled_topic = None
         self.post_list = post_list
         self.min_timestamp = min_timestamp
         self.max_timestamp = max_timestamp
+        self.authors = []
+        self.posts_text = []
     """
     get_id
 
@@ -31,7 +34,7 @@ class Discussion(object):
         a list of author id and name
     """
     def get_authors(self):
-        return []
+        return self.authors
 
     """
     get_posts
@@ -43,13 +46,40 @@ class Discussion(object):
         return self.post_list
 
     """
+    get_topics
+
+    Returns:
+        a list of Topics
+    """
+    def get_topics(self):
+        return self.topics
+
+    """
+    get_labeled_topic
+
+    Returns:
+        topic labeled by dataset researchers
+    """
+    def get_labeled_topic(self):
+        return self.labeled_topic
+
+    """
+    get_posts_by_author
+
+    Returns:
+        a list of Post written by an author
+    """
+    def get_posts_by_author(self, author):
+        return [post for post in self.post_list if post.get_author() == author]
+
+    """
     get_posts_text
 
     Returns:
         a list of Post text
     """
     def get_posts_text(self):
-        return []
+        return self.posts_text
 
     """
     get_start_timestamp

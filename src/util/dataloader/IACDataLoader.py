@@ -80,7 +80,7 @@ class IACDataLoader(object):
                     self.discussion_dict[discussion_id] = Discussion(discussion_id, title, topics, post_list, min(timestamp_list), max(timestamp_list))
                     self.discussion_dict[discussion_id].authors = [post.get_author() for post in post_list]
                     self.discussion_dict[discussion_id].posts_text = [post.get_raw_text() for post in post_list]
-        print("{0:d} dicussions were loaded".format(idx+1))
+        print("{0:d} dicussions were loaded".format(idx))
 
         print("Loading topic file...")
         self.topic_discussion_dict = dict()

@@ -2,9 +2,9 @@ import csv
 import os
 import json
 
-from Topic import Topic
-from Discussion import Discussion
-from Post import Post
+from util.dataloader.Topic import Topic
+from util.dataloader.Discussion import Discussion
+from util.dataloader.Post import Post
 
 class IACDataLoader(object):
     def __init__(self):
@@ -59,7 +59,7 @@ class IACDataLoader(object):
             #     break
             filepath = os.path.join(self.dataset_dir, path)
             if filepath.endswith("json"):
-                with open(filepath, 'rb') as f:
+                with open(filepath, 'r') as f:
                     posts, _, metadata = json.load(f)
                     topics = metadata["breadcrumbs"]
                     discussion_id = str(metadata["id_number"])
@@ -84,7 +84,7 @@ class IACDataLoader(object):
 
         print("Loading topic file...")
         self.topic_discussion_dict = dict()
-        with open(self.topic_path, 'rb') as csvfile:
+        with open(self.topic_path, 'r') as csvfile:
             spamreader = csv.reader(csvfile, delimiter=',')
             for idx, row in enumerate(spamreader):
                 if idx == 0:
@@ -100,7 +100,7 @@ class IACDataLoader(object):
 
         print("Loading author stance file...")
         self.author_stance_dict = dict()
-        with open(self.stance_path, 'rb') as csvfile:
+        with open(self.stance_path, 'r') as csvfile:
             spamreader = csv.reader(csvfile, delimiter=',')
             for idx, row in enumerate(spamreader):
                 if idx == 0:

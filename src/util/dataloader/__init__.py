@@ -1,15 +1,15 @@
-import IACDataLoader as iac
+from util.dataloader.IACDataLoader import IACDataLoader as iac
 
 def main():
-    dataloader = iac.IACDataLoader()
-    dataloader.set_dataset_dir("../../dataset/discussions")
-    dataloader.set_topic_filepath("../../dataset/topic.csv")
-    dataloader.set_stance_filepath("../../dataset/author_stance.csv")
-    dataloader.load()
+    dl = iac.IACDataLoader()
+    dl.set_dataset_dir("../../dataset/discussions")
+    dl.set_topic_filepath("../../dataset/topic.csv")
+    dl.set_stance_filepath("../../dataset/author_stance.csv")
+    dl.load()
 
-    topic_dict = dataloader.get_topic_dict()
-    discussions = dataloader.get_discussion_dict()
-    author_stance_dict = dataloader.get_author_stance_dict()
+    topic_dict = dl.get_topic_dict()
+    discussions = dl.get_discussion_dict()
+    author_stance_dict = dl.get_author_stance_dict()
 
     # Load each author's posts and stance in labeled discussions
     author_names = sorted(author_stance_dict.keys())

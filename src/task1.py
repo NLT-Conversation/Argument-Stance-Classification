@@ -165,10 +165,12 @@ def main():
     else:
         print("Load pre-trained SVM model")
         clf = joblib.load(open(svm_model_path, "rb"))
+        # clf = svm.SVC(kernel='linear', C=1)
         if clf:
-            # print("Accuracy of all data: {}".format(clf.score(X, y)))
             scores = cross_val_score(clf, X, y, cv=5)
             print("5-fold cross validation: {}".format(scores))
+            with open("task1.csv", "w") as output:
+                output.write("{},{}\n".format(",".join([str(s) for s in scores]), np.mean(scores)))
 
 if __name__ == "__main__":
     main()

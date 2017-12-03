@@ -13,6 +13,8 @@ from sklearn.externals import joblib
 from nltk.corpus import stopwords
 from nltk.stem import PorterStemmer
 
+from sklearn.model_selection import cross_val_score
+
 def preprocess(discussion_dict, topic_dict):
     unigram_dict_path = "unigram_dict.pickle"
     discussions_unigram_label_dict_path = "discussions_unigram_label_dict.txt"
@@ -163,9 +165,10 @@ def main():
     else:
         print("Load pre-trained SVM model")
         clf = joblib.load(open(svm_model_path, "rb"))
-
-    if clf:
-        print("Accuracy of all data: {}".format(clf.score(X, y)))
+        if clf:
+            # print("Accuracy of all data: {}".format(clf.score(X, y)))
+            scores = cross_val_score(clf, X, y, cv=5)
+            print("5-fold cross validation: {}".format(scores))
 
 if __name__ == "__main__":
     main()

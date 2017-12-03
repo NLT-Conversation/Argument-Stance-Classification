@@ -2,6 +2,9 @@
 
 data/iac_v1.1/
 
+# Mac
+.DS_Store
+
 # Created by https://www.gitignore.io/api/python,pycharm,jupyternotebook
 
 ### JupyterNotebook ###
@@ -16,6 +19,7 @@ data/iac_v1.1/
 # Reference: https://intellij-support.jetbrains.com/hc/en-us/articles/206544839
 
 # User-specific stuff:
+.idea
 .idea/**/workspace.xml
 .idea/**/tasks.xml
 .idea/dictionaries

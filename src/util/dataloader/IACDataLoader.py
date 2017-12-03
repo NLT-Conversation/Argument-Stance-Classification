@@ -11,6 +11,7 @@ class IACDataLoader(object):
         self.raw_topic_dict = dict()
         self.topic_discussion_dict = dict()
         self.author_stance_dict = dict()
+        self.discussion_author_stance_dict = dict()
         self.discussion_dict = dict()
         self.topic_path = None
         self.stance_path = None
@@ -100,6 +101,7 @@ class IACDataLoader(object):
 
         print("Loading author stance file...")
         self.author_stance_dict = dict()
+        self.discussion_author_stance_dict = dict()
         with open(self.stance_path, 'r') as csvfile:
             spamreader = csv.reader(csvfile, delimiter=',')
             for idx, row in enumerate(spamreader):
@@ -111,6 +113,29 @@ class IACDataLoader(object):
                 if author not in self.author_stance_dict:
                     self.author_stance_dict[author] = dict()
                 self.author_stance_dict[author][discussion_id] = [pro, anti, other]
+
+                # added: discussion_author_stance dict
+                if discussion_id not in self.discussion_author_stance_dict:
+                    self.discussion_author_stance_dict[discussion_id] = dict()
+                n_pro, n_anti, n_other = int(pro), int(anti), int(other)
+                if max([n_pro,n_anti,n_other]) == n_other:
+                    stance = 'other'
+                elif n_pro == n_anti:
+                    stance = 'other'
+                elif n_pro > n_anti:
+                    stance = 'pro'
+                else:
+                    stance = 'anti'
+                self.discussion_author_stance_dict[discussion_id][author] = stance
+
+
+    """
+    get_discussion_author_stance_dict
+    Returns:
+        a dictionary of stances
+    """
+    def get_discussion_author_stance_dict(self):
+        return self.discussion_author_stance_dict
 
     """
     get_topic_names

@@ -156,8 +156,7 @@ def main():
     X_tsne = TSNE(n_components=2, learning_rate=100).fit_transform(X)
     with open("X_TSNE.txt", "w") as output:
         output.write(str(X_tsne))
-    plt.scatter(X_tsne[:, 0], c=y)
-
+    
     print("Divide data into train/test sets")
     X_train, X_test, y_train, y_test = train_test_split(X_tsne, y, stratify=y, test_size=0.25)
     svm_model_path = "svm_model.pkl"

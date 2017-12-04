@@ -56,7 +56,7 @@ def preprocess(discussion_dict, topic_dict):
                             unigram_dict[word] = 1
             print("{}/{} discussions were processed".format(idx+1, len(discussion_ids)))
         pickle.dump(unigram_dict, open(unigram_dict_path, "wb"))
-        with open("unigram_dict.txt", "w", encoding='utf-8') as output:
+        with open("unigram_dict.txt", "w") as output:
             for key in unigram_dict.keys():
                 output.write("{}\t{}\n".format(key, unigram_dict[key]))
     else:
@@ -67,7 +67,7 @@ def preprocess(discussion_dict, topic_dict):
     X = []
     y = []
     unigram_list = sorted(unigram_dict.keys())
-    with open("unigram_list.txt", "w", encoding='utf-8') as output:
+    with open("unigram_list.txt", "w") as output:
         for u in unigram_list:
             output.write("{}\n".format(u))
     discussions_unigram_label_dict = dict()

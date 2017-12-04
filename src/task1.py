@@ -14,10 +14,8 @@ from nltk.corpus import stopwords
 from nltk.stem import PorterStemmer
 
 from sklearn.model_selection import cross_val_score
-
 from sklearn.manifold import TSNE
 from sklearn.decomposition import PCA
-import matplotlib.pyplot as plt
 
 def preprocess(discussion_dict, topic_dict):
     unigram_dict_path = "unigram_dict.pickle"
@@ -155,8 +153,13 @@ def main():
 
     #dimension reduction
 
+    X_tsne = TSNE(n_components=2, learning_rate=100).fit_transform(X)
+    with open("X_TSNE.txt", "w", encoding='utf-8') as output:
+        output.write(str(X_tsne))
+    plt.scatter(X_tsne[:, 0], c=y)
+
     print("Divide data into train/test sets")
-    X_train, X_test, y_train, y_test = train_test_split(X, y, stratify=y, test_size=0.25)
+    X_train, X_test, y_train, y_test = train_test_split(X_tsne, y, stratify=y, test_size=0.25)
     svm_model_path = "svm_model.pkl"
     clf = None
     if not os.path.exists(svm_model_path):

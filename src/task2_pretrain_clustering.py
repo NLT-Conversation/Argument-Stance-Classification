@@ -7,9 +7,7 @@ import os
 import nltk
 import re
 import timeit
-
 import gensim.models as g
-
 import util.dataloader.IACDataLoader as iac
 import util.clustering.KmeansCosine as kmeans
 
@@ -22,8 +20,6 @@ from sklearn.model_selection import cross_val_score
 from nltk.corpus import stopwords
 from nltk.stem import PorterStemmer
 from sklearn.metrics.cluster import adjusted_mutual_info_score
-
-import os
 
 def get_class_label(stance):
     pro, anti, other = stance
@@ -52,7 +48,6 @@ def main():
 
     # init kmeans models
     cluster_model = kmeans.KmeansCosine(K=3)
-
     dataloader = iac.IACDataLoader()
     dataloader.set_dataset_dir("dataset/discussions")
     dataloader.set_topic_filepath("dataset/topic.csv")
@@ -78,7 +73,6 @@ def main():
                         for post in posts:
                             tmp_text = post.get_raw_text()
                             words += get_preprocessed_words(tmp_text, cachedStopWords)
-                            break
                         vec = d2v_model.infer_vector(words)
                         X.append(vec)
                         y.append(get_class_label(author_stance_dict[author][dis_id]))
@@ -86,7 +80,6 @@ def main():
             y_clustered = cluster_model.get_clusters(X)
             score = adjusted_mutual_info_score(y, y_clustered)
             print("Adjusted Mutual Infomation Score: {}".format(score))
-
             output.write("{},{}\n".format(topic, score))
 
 if __name__ == "__main__":

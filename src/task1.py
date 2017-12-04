@@ -101,13 +101,13 @@ def preprocess(discussion_dict, topic_dict):
                     unigram_vec[unigram_list.index(w_key)] = word_dict[w_key]
                 discussions_unigram_label_dict[discussion_id] = [unigram_vec, topic]
             print("{}/{} discussions were processed".format(idx+1, len(discussion_ids)))
-        with open("discussions_unigram_label_dict.txt", "w", encoding='utf-8') as output:
+        with open("discussions_unigram_label_dict.txt", "w") as output:
             for d_id in discussions_unigram_label_dict.keys():
                 vec, label = discussions_unigram_label_dict[d_id]
                 vec_str = ','.join([str(v) for v in vec])
                 output.write("{},{},{}\n".format(d_id, label, vec_str))
 
-        with open("discussions_unigram_label_dict.txt", "r", encoding='utf-8') as f:
+        with open("discussions_unigram_label_dict.txt", "r") as f:
             idx = 0
             for idx, line in enumerate(f):
                 if (idx+1)%1000 == 0:
@@ -120,7 +120,7 @@ def preprocess(discussion_dict, topic_dict):
             print("{} discussions were loaded".format(idx))
     else:
         print("Load discussions_unigram_label_dict ... ")
-        with open("discussions_unigram_label_dict.txt", "r", encoding='utf-8') as f:
+        with open("discussions_unigram_label_dict.txt", "r") as f:
             idx = 0
             for idx, line in enumerate(f):
                 if (idx+1)%1000 == 0:
@@ -154,7 +154,7 @@ def main():
     #dimension reduction
 
     X_tsne = TSNE(n_components=2, learning_rate=100).fit_transform(X)
-    with open("X_TSNE.txt", "w", encoding='utf-8') as output:
+    with open("X_TSNE.txt", "w") as output:
         output.write(str(X_tsne))
     plt.scatter(X_tsne[:, 0], c=y)
 
@@ -169,16 +169,16 @@ def main():
         clf.fit(X_train, y_train)
         print("Accuracy of testing data: {}".format(clf.score(X_test, y_test)))
         print("Dump the model...")
-        joblib.dump(clf, open(svm_model_path, "wb", encoding='utf-8'))
+        joblib.dump(clf, open(svm_model_path, "wb"))
         print("Done!")
     else:
         print("Load pre-trained SVM model")
-        clf = joblib.load(open(svm_model_path, "rb", encoding='utf-8'))
+        clf = joblib.load(open(svm_model_path, "rb"))
         # clf = svm.SVC(kernel='linear', C=1)
         if clf:
             scores = cross_val_score(clf, X, y, cv=5)
             print("5-fold cross validation: {}".format(scores))
-            with open("task1.csv", "w", encoding='utf-8') as output:
+            with open("task1.csv", "w") as output:
                 output.write("{},{}\n".format(",".join([str(s) for s in scores]), np.mean(scores)))
 
 if __name__ == "__main__":

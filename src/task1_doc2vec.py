@@ -34,10 +34,10 @@ def preprocess(discussion_dict, topic_dict):
     topic_list = list(topic_dict.keys())
     X = []
     y = []
-    with open("task1_doc2vec_topic_list.txt", "w") as output:
+    with open(topic_list_file, "w") as output:
         for topic in topic_list:
             output.write("{}\n".format(topic))
-    with open("task1_doc2vec_vectors.txt", "w") as output:
+    with open(vectors_file, "w") as output:
         for topic_idx, topic in enumerate(topic_list):
             for dis_id in topic_dict[topic]:
                 posts = discussion_dict[dis_id].get_posts_text()

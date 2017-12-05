@@ -81,7 +81,6 @@ def main():
                         for post in posts:
                             tmp_text = post.get_raw_text()
                             words += get_preprocessed_words(tmp_text, cachedStopWords)
-                            break
                         vec = d2v_model.infer_vector(words)
                         X.append(vec)
                         y.append(get_class_label(author_stance_dict[author][dis_id]))
@@ -90,7 +89,7 @@ def main():
             clf = svm.SVC(kernel='linear', C=1)
             scores = cross_val_score(clf, X, y, cv=5)
             print("5-fold cross validation: {}, mean: {}".format(scores, np.mean(scores)))
-            
+
             output.write("{},{},{}\n".format(topic, ",".join([str(s) for s in scores]), np.mean(scores)))
 
 if __name__ == "__main__":

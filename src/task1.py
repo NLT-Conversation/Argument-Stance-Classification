@@ -19,14 +19,12 @@ def preprocess(discussion_dict, topic_dict):
     unigram_dict_path = "unigram_dict.pickle"
     discussions_unigram_label_dict_path = "discussions_unigram_label_dict.txt"
     topic_list = sorted(topic_dict.keys())
-
     print("===== Start preprocessing =====")
     # load stopwords list
     nltk.download('stopwords')
     cachedStopWords = stopwords.words("english")
     # load Porter stemmer
     stemmer = PorterStemmer()
-
     # Collect unigram list
     unigram_dict = dict()
     if not os.path.exists(unigram_dict_path):
@@ -60,7 +58,6 @@ def preprocess(discussion_dict, topic_dict):
     else:
         print("Load unigram_dict ... ")
         unigram_dict = pickle.load(open(unigram_dict_path, "rb"))
-
     # Generate unigram vector for discussions
     X = []
     y = []
@@ -104,7 +101,6 @@ def preprocess(discussion_dict, topic_dict):
                 vec, label = discussions_unigram_label_dict[d_id]
                 vec_str = ','.join([str(v) for v in vec])
                 output.write("{},{},{}\n".format(d_id, label, vec_str))
-
         with open("discussions_unigram_label_dict.txt", "r") as f:
             idx = 0
             for idx, line in enumerate(f):
@@ -123,17 +119,12 @@ def preprocess(discussion_dict, topic_dict):
             for idx, line in enumerate(f):
                 if (idx+1)%1000 == 0:
                     print("{} discussions were loaded".format(idx+1))
-                # if idx>=300:
-                #     break
                 items = line.strip().split(',')
                 X.append(items[2:])
                 y.append(topic_list.index(items[1]))
             print("{} discussions were loaded".format(idx))
-
     print("===== Done! =====")
-
     return X, y
-
 
 def main():
     dataloader = iac.IACDataLoader()

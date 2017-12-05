@@ -21,8 +21,17 @@ class CnnTopic(nn.Module):
 
         in_layer = self.vec_size*self.num_vec
         out_layer = self.num_classes
-        self.linear = nn.Linear(in_layer, out_layer).cuda()
-        self.softmax = nn.Softmax().cuda()
+
+        self.relu = nn.ReLU()
+        self.conv1 = nn.Conv2d(1, 1, (4, self.vec_size))
+        self.mp1 = nn.MaxPool2d((self.num_vec-4, 1))
+        self.conv2 = nn.Conv2d(1, 1, (3, self.vec_size))
+        self.mp2 = nn.MaxPool2d((self.num_vec-3, 1))
+        self.conv3 = nn.Conv2d(1, 1, (2, self.vec_size))
+        self.mp3 = nn.MaxPool2d((self.num_vec-2, 1))
+        self.fc1 = nn.Linear(3, self.num_classes)
+        self.softmax = nn.Softmax()
+
         self.loss_function = nn.MSELoss().cuda()
         self.optimizer = optim.Adadelta(self.parameters())
 
@@ -31,12 +40,34 @@ class CnnTopic(nn.Module):
         self.y_train = y_train
 
     def forward(self, doc):
-        (H, W) = doc.data.size()
-        doc = doc.view(1, H*W)
-        doc = self.linear(doc)
-        doc = F.sigmoid(doc)
-        doc = self.softmax(doc)
-        return doc
+        x = doc
+        if len(x.size()) == 2:
+            (H, W) = x.data.size()
+            x = x.view(1, 1, H, W)
+        x11 = self.conv1(x)
+        x11 = self.relu(x11)
+        x11 = self.mp1(x11)
+        # x12 = self.conv1(x)
+        # x12 = self.relu(x12)
+        # x12 = self.mp1(x12)
+        x21 = self.conv2(x)
+        x21 = self.relu(x21)
+        x21 = self.mp2(x21)
+        # x22 = self.conv2(x)
+        # x22 = self.relu(x22)
+        # x22 = self.mp2(x22)
+        x31 = self.conv3(x)
+        x31 = self.relu(x31)
+        x31 = self.mp3(x31)
+        # x32 = self.conv3(x)
+        # x32 = self.relu(x32)
+        # x32 = self.mp3(x32)
+        x = torch.cat((x11,x21,x31), 2)
+        x = x.view(1,1,3)
+        x = self.fc1(x)
+        x = x.view(1,self.num_classes)
+        x = self.softmax(x)
+        return x
 
     def train(self):
         if self.X_train == None or self.y_train == None:
@@ -79,7 +110,15 @@ class CnnTopic(nn.Module):
         return indices[0]
 
 def main():
-    pass
+    X_train, X_test, y_train, y_test = doc2vec_loader.load_data(max_num_vecs=300)
+    nn = cnn.CnnTopic(num_vec=300)
+    nn.cuda()
+
+    for idx, x in enumerate(X_test):
+        x = Variable(torch.FloatTensor(x).cuda())
+
+        print(nn.forward(x))
+        return
 
 if __name__ == "__main__":
     main()

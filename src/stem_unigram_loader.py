@@ -126,12 +126,12 @@ def preprocess(discussion_dict, topic_dict):
     print("===== Done! =====")
     return X, y
 
-def load_data():
+def load_data(remove_outlier = False):
     dataloader = iac.IACDataLoader()
     dataloader.set_dataset_dir("dataset/discussions")
     dataloader.set_topic_filepath("dataset/topic.csv")
     dataloader.set_stance_filepath("dataset/author_stance.csv")
-    dataloader.load()
+    dataloader.load(remove_outlier)
     topic_dict = dataloader.get_topic_dict()
     discussion_dict = dataloader.get_discussion_dict()
     author_stance_dict = dataloader.get_author_stance_dict()

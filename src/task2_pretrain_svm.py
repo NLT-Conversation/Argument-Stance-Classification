@@ -52,21 +52,25 @@ def main():
     d2v_model_path = "doc2vec/apnews_dbow/doc2vec.bin"
     d2v_model = g.Doc2Vec.load(d2v_model_path)
 
-    # init kmeans models
-    cluster_model = kmeans.KmeansCosine(K=3)
-
     dataloader = iac.IACDataLoader()
     dataloader.set_dataset_dir("dataset/discussions")
     dataloader.set_topic_filepath("dataset/topic.csv")
     dataloader.set_stance_filepath("dataset/author_stance.csv")
-    dataloader.load()
+    remove_outlier = True
+    dataloader.load(remove_outlier=remove_outlier)
     topic_dict = dataloader.get_topic_dict()
     discussion_dict = dataloader.get_discussion_dict()
     author_stance_dict = dataloader.get_author_stance_dict()
 
-    topic_list = list(topic_dict.keys())
+    topic_list = list(sorted(topic_dict.keys()))
 
-    with open("task2_pretrain_svm.csv", "w") as output:
+    keys = sorted(author_stance_dict.keys())
+    with open("author_stance_dict_{}.txt".format(remove_outlier), "w") as f:
+        for key in keys:
+            f.write("{},{}\n".format(key, len(author_stance_dict[key].keys())))
+
+    # with open("task2_pretrain_svm.csv", "w") as output:
+    if True:
         for topic in topic_list:
             print("Load topic {}".format(topic))
             X = []
@@ -85,12 +89,15 @@ def main():
                         X.append(vec)
                         y.append(get_class_label(author_stance_dict[author][dis_id]))
 
-            X_train, X_test, y_train, y_test = train_test_split(X, y, stratify=y, test_size=0.25)
+            X_train, X_test, y_train, y_test = train_test_split(X, y, stratify=y, test_size=0.2)
+            print("Number of training examples: {}, testing examples: {}".format(len(X_train), len(X_test)))
             clf = svm.SVC(kernel='linear', C=1)
-            scores = cross_val_score(clf, X, y, cv=5)
-            print("5-fold cross validation: {}, mean: {}".format(scores, np.mean(scores)))
-
-            output.write("{},{},{}\n".format(topic, ",".join([str(s) for s in scores]), np.mean(scores)))
+            clf.fit(X_train, y_train)
+            # scores = cross_val_score(clf, X_train, y_train, cv=5)
+            # print("5-fold cross validation: {}, mean: {}".format(scores, np.mean(scores)))
+            # output.write("{},{},{}\n".format(topic, ",".join([str(s) for s in scores]), np.mean(scores)))
+            print("Traing accuracy: {}".format(clf.score(X_train, y_train)))
+            print("Testing accuracy: {}".format(clf.score(X_test, y_test)))
 
 if __name__ == "__main__":
     main()

@@ -1,6 +1,7 @@
 import csv
 import os
 import json
+import numpy as np
 
 from util.dataloader.Topic import Topic
 from util.dataloader.Discussion import Discussion
@@ -43,11 +44,16 @@ class IACDataLoader(object):
     def set_stance_filepath(self, path):
         self.stance_path = path
 
+    def reject_outliers(self, d, m=2):
+        d = np.array(d)
+        stances = d[:,1].astype(float)
+        return d[abs(stances - np.mean(stances)) < m * np.std(stances)]
+
     """
     load dataset, stance data
 
     """
-    def load(self):
+    def load(self, remove_outlier=False):
         print("Loading dataset files...")
         self.raw_topic_dict = dict()
         self.discussion_dict = dict()
@@ -99,6 +105,33 @@ class IACDataLoader(object):
                     self.discussion_dict[d_id].labeled_topic = topic
 
         print("Loading author stance file...")
+
+        non_outlier_set = set()
+        if remove_outlier:
+            with open(self.stance_path, 'r') as csvfile:
+                as_reader = csv.reader(csvfile)
+                d_dict = dict()
+                d_ids = []
+                for idx, item in enumerate(as_reader):
+                    if idx > 0:
+                        topic,discussion_id,author,pro,anti,other = item
+                        pro = int(pro)
+                        anti = int(anti)
+                        other = int(other)
+                        stance = (pro-anti)/(pro+anti+other)
+                        if discussion_id in d_dict:
+                            d_dict[discussion_id].append([author, stance])
+                        else:
+                            d_ids.append(discussion_id)
+                            d_dict[discussion_id] = [[author, stance]]
+                discussion_dict_no_outlier = dict()
+                for d_id in d_ids:
+                    discussion_dict_no_outlier[d_id] = self.reject_outliers(d_dict[d_id])
+                    for author_stance in discussion_dict_no_outlier[d_id]:
+                        author, stance = author_stance
+                        non_outlier_set.add("{}_{}".format(d_id, author))
+
+
         self.author_stance_dict = dict()
         with open(self.stance_path, 'r') as csvfile:
             spamreader = csv.reader(csvfile, delimiter=',')
@@ -108,9 +141,16 @@ class IACDataLoader(object):
                 topic, discussion_id, author, pro, anti, other = row
                 topic = topic.replace('"', '').strip()
                 author = author.replace('"', '').strip()
+
+                if remove_outlier:
+                    key = "{}_{}".format(discussion_id, author)
+                    if key not in non_outlier_set:
+                        continue
+
                 if author not in self.author_stance_dict:
                     self.author_stance_dict[author] = dict()
                 self.author_stance_dict[author][discussion_id] = [pro, anti, other]
+
 
     """
     get_topic_names

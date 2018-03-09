@@ -69,8 +69,7 @@ def main():
         for key in keys:
             f.write("{},{}\n".format(key, len(author_stance_dict[key].keys())))
 
-    # with open("task2_pretrain_svm.csv", "w") as output:
-    if True:
+    with open("task2_pretrain_svm.csv", "w") as output:
         for topic in topic_list:
             print("Load topic {}".format(topic))
             X = []
@@ -95,7 +94,7 @@ def main():
             clf.fit(X_train, y_train)
             # scores = cross_val_score(clf, X_train, y_train, cv=5)
             # print("5-fold cross validation: {}, mean: {}".format(scores, np.mean(scores)))
-            # output.write("{},{},{}\n".format(topic, ",".join([str(s) for s in scores]), np.mean(scores)))
+            output.write("{},{},{}\n".format(topic, clf.score(X_train, y_train), clf.score(X_test, y_test)))
             print("Traing accuracy: {}".format(clf.score(X_train, y_train)))
             print("Testing accuracy: {}".format(clf.score(X_test, y_test)))
 

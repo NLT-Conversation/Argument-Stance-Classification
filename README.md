@@ -64,11 +64,13 @@ We implemented a sentence classification model with convolutional neural network
 
 Since our computing power is limited, we randomly select 300 posts in each discussion, and convert every post into a Doc2Vec vector. If a discussion contains less than 300 posts, we added vectors with zeros for padding (i.e. if a discussion has 250 posts, we convert the 250 posts to 250 Doc2Vec vectors plus 50 vectors with zeros) because CNN takes a fixed input size. The following are the values of testing accuracy in different number of epochs.
 
-|Doc2Vec| # of epochs | Accuracy |
-| ------------- |: ------------- |:-------------:|
-| | 1 | 75.73% |
-| | 4 | 84.52% |
-| | 8 | 83.96% |
+Doc2Vec
+
+| # of epochs  | Accuracy |
+| ------------- |: -------------:|
+| 1 | 75.73% |
+| 4 | 84.52% |
+| 8 | 83.96% |
 
 
 

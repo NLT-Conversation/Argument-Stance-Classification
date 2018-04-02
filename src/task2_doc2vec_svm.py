@@ -69,7 +69,7 @@ def main():
         for key in keys:
             f.write("{},{}\n".format(key, len(author_stance_dict[key].keys())))
 
-    with open("task2_pretrain_svm.csv", "w") as output:
+    with open("task2_doc2vec_svm.csv", "w") as output:
         for topic in topic_list:
             print("Load topic {}".format(topic))
             X = []

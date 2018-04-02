@@ -79,7 +79,7 @@ def main():
     clf = svm.SVC(kernel='linear', C=1)
     scores = cross_val_score(clf, X, y, cv=5)
     print("5-fold cross validation: {}, mean: {}".format(scores, np.mean(scores)))
-    with open("task1_doc2vec.csv", "w") as output:
+    with open("task1_doc2vec_svm.csv", "w") as output:
         output.write("{},{}\n".format(",".join([str(s) for s in scores]), np.mean(scores)))
 
 if __name__ == "__main__":

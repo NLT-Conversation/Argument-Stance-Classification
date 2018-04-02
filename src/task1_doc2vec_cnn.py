@@ -78,7 +78,7 @@ def main():
             x = Variable(torch.FloatTensor(x).cuda())
             y_pred.append(nn.FromOneHot(nn.forward(x).data[0]))
         accu = metrics.accuracy_score(y_true=y_test, y_pred=y_pred)
-        with open("cnn_topic.model.accuracy.txt", "a") as output:
+        with open("task1_doc2vec_cnn.txt", "a") as output:
             output.write("{},{}\n".format(epoch+1, accu))
 
 

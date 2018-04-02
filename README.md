@@ -67,12 +67,10 @@ Since our computing power is limited, we randomly select 300 posts in each discu
 Doc2Vec
 
 | # of epochs  | Accuracy |
-| ------------- |: -------------:|
+| ------------- |:-------------:|
 | 1 | 75.73% |
 | 4 | 84.52% |
 | 8 | 83.96% |
-
-
 
 
 ## Task 2: Identify author stance in discussions

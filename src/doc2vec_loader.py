@@ -53,7 +53,7 @@ def preprocess(discussion_dict, topic_dict):
     pickle.dump(y, open(topic_list_file, "wb"))
     return X, y
 
-def load_data(test_size=0.25, max_num_vecs=100):
+def load_data(test_size=0.25, max_num_vecs=100, remove_outlier = False):
     X = []
     y = []
     if os.path.exists(topic_list_file) and os.path.exists(vectors_file):
@@ -66,7 +66,7 @@ def load_data(test_size=0.25, max_num_vecs=100):
         dataloader.set_dataset_dir("dataset/discussions")
         dataloader.set_topic_filepath("dataset/topic.csv")
         dataloader.set_stance_filepath("dataset/author_stance.csv")
-        dataloader.load()
+        dataloader.load(remove_outlier)
         topic_dict = dataloader.get_topic_dict()
         discussion_dict = dataloader.get_discussion_dict()
         author_stance_dict = dataloader.get_author_stance_dict()
